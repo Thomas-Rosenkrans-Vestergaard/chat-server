@@ -3,7 +3,7 @@ package com.tvestergaard.server;
 import com.tvestergaard.server.messages.OutMessage;
 import org.json.JSONObject;
 
-public abstract class ChatException extends Exception implements OutMessage
+public class ChatException extends Exception implements OutMessage
 {
 
     private final int exceptionId;

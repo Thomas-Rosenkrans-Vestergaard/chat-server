@@ -1,9 +1,13 @@
-package com.tvestergaard.server.listeners;
+package com.tvestergaard.server.input;
 
 import com.tvestergaard.server.User;
 import org.json.JSONObject;
 
-public interface Listener
+/**
+ * Defines a type that handles an incoming message. The {@link MessageReceiverListener#getMessageType()} method is used to identify
+ * the {@link MessageReceiverListener} that handles an incoming message.
+ */
+public interface MessageReceiverListener
 {
 
     /**

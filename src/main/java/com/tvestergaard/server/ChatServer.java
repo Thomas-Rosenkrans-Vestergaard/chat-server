@@ -1,8 +1,12 @@
 package com.tvestergaard.server;
 
-import com.tvestergaard.server.listeners.TextMessageListener;
+import com.tvestergaard.server.input.DelegatingMessageReceiver;
+import com.tvestergaard.server.input.ForwardingMessageReceiverListener;
 import com.tvestergaard.server.messages.*;
+import com.tvestergaard.server.output.DefaultMessageSender;
+import com.tvestergaard.server.output.MessageSender;
 import org.java_websocket.WebSocket;
+import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
@@ -19,12 +23,12 @@ public class ChatServer extends WebSocketServer
     /**
      * The object responsible for sending messages.
      */
-    private final MessageSender sender = new ConnectedMessageSender(users, new JsonMessageComposer());
+    private final MessageSender sender = new DefaultMessageSender(users, new JsonMessageComposer());
 
     /**
-     * The listeners that can receive incoming messages.
+     * The input that can receive incoming messages.
      */
-    private final ListenerMessageReceiver receiver = new ListenerMessageReceiver(sender, users);
+    private final DelegatingMessageReceiver receiver = new DelegatingMessageReceiver(sender, users);
 
     /**
      * Creates a new {@link ChatServer}.
@@ -35,9 +39,15 @@ public class ChatServer extends WebSocketServer
     {
         super(address);
 
-        receiver.register(new TextMessageListener(users, sender));
+        receiver.register(new ForwardingMessageReceiverListener(users, sender));
     }
 
+    /**
+     * Called when a new connection opens.
+     *
+     * @param conn      The connection that was just opened.
+     * @param handshake Additional information.
+     */
     @Override public void onOpen(WebSocket conn, ClientHandshake handshake)
     {
         User user = users.add(conn);
@@ -47,6 +57,14 @@ public class ChatServer extends WebSocketServer
         sender.send(Recipients.toThese(user), new PersonalWelcomeMessage(user));
     }
 
+    /**
+     * Called when a connection is closed.
+     *
+     * @param conn   The connection that is being closed.
+     * @param code   The codes can be looked up here: {@link CloseFrame}
+     * @param reason Additional information about the closing.
+     * @param remote
+     **/
     @Override public void onClose(WebSocket conn, int code, String reason, boolean remote)
     {
         User user = conn.getAttachment();
@@ -54,6 +72,12 @@ public class ChatServer extends WebSocketServer
         sender.send(Recipients.toAllExcept(user), new GoodbyeMessage(user));
     }
 
+    /**
+     * Called when the server receives a message.
+     *
+     * @param conn    The connection the client used to send the message.
+     * @param message The body of the message.
+     */
     @Override public void onMessage(WebSocket conn, String message)
     {
         receiver.handle(conn.getAttachment(), message);
