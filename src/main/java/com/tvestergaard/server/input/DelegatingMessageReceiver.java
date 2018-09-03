@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation of {@link MessageReceiver} where multiple {@link MessageReceiverListener}s can be registered to handle differing
+ * Implementation of {@link MessageReceiver} where multiple {@link MessageReceiverCommand}s can be registered to handle differing
  * message types.
  */
 public class DelegatingMessageReceiver implements MessageReceiver
@@ -23,9 +23,9 @@ public class DelegatingMessageReceiver implements MessageReceiver
     private final String ATTRIBUTE_PAYLOAD = "payload";
 
     /**
-     * The registered {@link MessageReceiverListener} instances.
+     * The registered {@link MessageReceiverCommand} instances.
      */
-    private final Map<String, MessageReceiverListener> listeners = new HashMap<>();
+    private final Map<String, MessageReceiverCommand> commands = new HashMap<>();
 
     /**
      * The object used to send messages to users, used in exceptional cases.
@@ -50,17 +50,17 @@ public class DelegatingMessageReceiver implements MessageReceiver
     }
 
     /**
-     * Registers a new {@link MessageReceiverListener}.
+     * Registers a new {@link MessageReceiverCommand}.
      *
-     * @param listener The listener to register with the object.
+     * @param command The command to register with the object.
      */
-    public void register(MessageReceiverListener listener)
+    public void register(MessageReceiverCommand command)
     {
-        listeners.put(listener.getMessageType(), listener);
+        commands.put(command.getMessageType(), command);
     }
 
     /**
-     * Parses the incoming message and delegates its payload to a suitable {@link MessageReceiverListener}.
+     * Parses the incoming message and delegates its payload to a suitable {@link MessageReceiverCommand}.
      *
      * @param sender  The user who sent the message.
      * @param message The raw message.
@@ -71,13 +71,13 @@ public class DelegatingMessageReceiver implements MessageReceiver
             JSONTokener tokener = new JSONTokener(message);
             JSONObject  root    = new JSONObject(tokener);
 
-            MessageReceiverListener responsibleListener = listeners.get(root.getString(ATTRIBUTE_TYPE));
-            if (responsibleListener == null) {
-                output.send(Recipients.toThese(sender), new NoListenerException());
+            MessageReceiverCommand responsiblecommand = commands.get(root.getString(ATTRIBUTE_TYPE));
+            if (responsiblecommand == null) {
+                output.send(Recipients.toThese(sender), new NoCommandException());
                 return;
             }
 
-            responsibleListener.handle(root.getJSONObject(ATTRIBUTE_PAYLOAD), sender);
+            responsiblecommand.handle(root.getJSONObject(ATTRIBUTE_PAYLOAD), sender);
 
         } catch (JSONException e) {
             output.send(Recipients.toThese(sender), new ParseChatException());

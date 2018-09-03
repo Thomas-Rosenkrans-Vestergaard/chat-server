@@ -1,7 +1,7 @@
 package com.tvestergaard.server;
 
 import com.tvestergaard.server.input.DelegatingMessageReceiver;
-import com.tvestergaard.server.input.ForwardingMessageReceiverListener;
+import com.tvestergaard.server.input.ForwardingMessageReceiverCommand;
 import com.tvestergaard.server.output.JsonMessageComposer;
 import com.tvestergaard.server.output.messages.*;
 import com.tvestergaard.server.output.DefaultMessageSender;
@@ -40,7 +40,7 @@ public class ChatServer extends WebSocketServer
     {
         super(address);
 
-        receiver.register(new ForwardingMessageReceiverListener(users, sender));
+        receiver.register(new ForwardingMessageReceiverCommand(users, sender));
     }
 
     /**

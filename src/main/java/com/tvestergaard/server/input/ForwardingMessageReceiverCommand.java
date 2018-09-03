@@ -9,10 +9,10 @@ import com.tvestergaard.server.output.MessageSender;
 import org.json.JSONObject;
 
 /**
- * Simple {@link MessageReceiverListener} that forwards messages to all the other connected users. Implements basic
+ * Simple {@link MessageReceiverCommand} that forwards messages to all the other connected users. Implements basic
  * communication.
  */
-public class ForwardingMessageReceiverListener implements MessageReceiverListener
+public class ForwardingMessageReceiverCommand implements MessageReceiverCommand
 {
 
     /**
@@ -26,21 +26,21 @@ public class ForwardingMessageReceiverListener implements MessageReceiverListene
     private final MessageSender output;
 
     /**
-     * Creates a new {@link ForwardingMessageReceiverListener}.
+     * Creates a new {@link ForwardingMessageReceiverCommand}.
      *
      * @param users  The repository containing the connected users.
      * @param output The {@link MessageSender} used to send messages to connected users.
      */
-    public ForwardingMessageReceiverListener(UserRepository users, MessageSender output)
+    public ForwardingMessageReceiverCommand(UserRepository users, MessageSender output)
     {
         this.users = users;
         this.output = output;
     }
 
     /**
-     * Returns the identifier of the message type handled by this listener.
+     * Returns the identifier of the message type handled by this command.
      *
-     * @return The identifier of the message type handled by this listener.
+     * @return The identifier of the message type handled by this command.
      */
     @Override public String getMessageType()
     {
