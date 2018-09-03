@@ -1,6 +1,5 @@
 package com.tvestergaard.server;
 
-import com.tvestergaard.server.listeners.Listener;
 import com.tvestergaard.server.listeners.TextMessageListener;
 import com.tvestergaard.server.messages.*;
 import org.java_websocket.WebSocket;
@@ -8,16 +7,9 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ChatServer extends WebSocketServer
 {
-
-    /**
-     * The next id that can be given to some client.
-     */
-    private int nextId = 0;
 
     /**
      * The connected users.
@@ -25,14 +17,14 @@ public class ChatServer extends WebSocketServer
     private final UserRepository users = new UserRepository();
 
     /**
-     * The listeners that can receive incoming messages.
-     */
-    private final Map<String, Listener> listeners = new HashMap<>();
-
-    /**
      * The object responsible for sending messages.
      */
     private final MessageSender sender = new ConnectedMessageSender(users, new JsonMessageComposer());
+
+    /**
+     * The listeners that can receive incoming messages.
+     */
+    private final ListenerMessageReceiver receiver = new ListenerMessageReceiver(sender, users);
 
     /**
      * Creates a new {@link ChatServer}.
@@ -43,12 +35,7 @@ public class ChatServer extends WebSocketServer
     {
         super(address);
 
-        addListener(new TextMessageListener(users));
-    }
-
-    private void addListener(Listener listener)
-    {
-        listeners.put(listener.getMessageType(), listener);
+        receiver.register(new TextMessageListener(users, sender));
     }
 
     @Override public void onOpen(WebSocket conn, ClientHandshake handshake)
@@ -69,7 +56,7 @@ public class ChatServer extends WebSocketServer
 
     @Override public void onMessage(WebSocket conn, String message)
     {
-
+        receiver.handle(conn.getAttachment(), message);
     }
 
     @Override public void onError(WebSocket conn, Exception ex)
