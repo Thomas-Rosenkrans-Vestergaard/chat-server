@@ -39,12 +39,22 @@ public class UserRepository
         return user;
     }
 
+    /**
+     * Removes the provided user from the repository.
+     *
+     * @param user The user to remove from the repository.
+     */
     public void remove(User user)
     {
         usedUsernames.remove(user.getUsername());
         users.remove(user.getId());
     }
 
+    /**
+     * Returns a {@code Collection} of the users in the repository.
+     *
+     * @return The {@code Collection} of the users in the repository.
+     */
     public Collection<User> collect()
     {
         return Collections.unmodifiableCollection(users.values());
