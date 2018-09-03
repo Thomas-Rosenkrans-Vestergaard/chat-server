@@ -1,9 +1,16 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output.messages;
 
 import org.json.JSONObject;
 
-public interface OutMessage extends Message
+public interface Message
 {
+
+    /**
+     * Returns the identifier of the message type.
+     *
+     * @return The identifier of the message type.
+     */
+    String getMessageType();
 
     /**
      * Adds the payload of the message to the provided {@code JSONObject}.

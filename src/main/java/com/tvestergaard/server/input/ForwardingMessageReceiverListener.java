@@ -3,8 +3,8 @@ package com.tvestergaard.server.input;
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.messages.OutTextMessage;
-import com.tvestergaard.server.messages.Recipients;
+import com.tvestergaard.server.output.messages.TextMessage;
+import com.tvestergaard.server.output.messages.Recipients;
 import com.tvestergaard.server.output.MessageSender;
 import org.json.JSONObject;
 
@@ -57,7 +57,7 @@ public class ForwardingMessageReceiverListener implements MessageReceiverListene
     {
         try {
             String message = payload.getString("message");
-            output.send(Recipients.toAllExcept(sender), new OutTextMessage(sender, message));
+            output.send(Recipients.toAllExcept(sender), new TextMessage(sender, message));
         } catch (Exception e) {
             output.send(Recipients.toThese(sender), new GeneralChatException(e));
         }

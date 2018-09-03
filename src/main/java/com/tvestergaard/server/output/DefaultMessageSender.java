@@ -2,9 +2,9 @@ package com.tvestergaard.server.output;
 
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.messages.MessageComposer;
-import com.tvestergaard.server.messages.OutMessage;
-import com.tvestergaard.server.messages.Recipients;
+import com.tvestergaard.server.output.messages.Message;
+import com.tvestergaard.server.output.messages.MessageComposer;
+import com.tvestergaard.server.output.messages.Recipients;
 
 import java.util.List;
 import java.util.Set;
@@ -43,29 +43,29 @@ public class DefaultMessageSender implements MessageSender
      * @param recipients The recipients to send the message to.
      * @param message    The message to send to the recipients.
      */
-    @Override public void send(Recipients recipients, OutMessage message)
+    @Override public void send(Recipients recipients, Message message)
     {
-        Recipients.Mode mode        = recipients.getMode();
-        String          textMessage = composer.compose(message);
+        Recipients.Group mode        = recipients.getGroup();
+        String           textMessage = composer.compose(message);
 
-        if (mode == Recipients.Mode.TO_ALL) {
+        if (mode == Recipients.Group.ALL) {
             sendToAll(textMessage);
             return;
         }
 
-        if (mode == Recipients.Mode.TO_ALL_EXCEPT) {
-            sendToAllExcept(textMessage, recipients.getSet());
+        if (mode == Recipients.Group.ALL_EXCEPT) {
+            sendToAllExcept(textMessage, recipients.getExceptions());
             return;
         }
 
-        if (mode == Recipients.Mode.TO_THESE) {
-            sendToThese(textMessage, recipients.getList());
+        if (mode == Recipients.Group.TO_THESE) {
+            sendToThese(textMessage, recipients.getThese());
             return;
         }
     }
 
     /**
-     * Sends the provided {@link OutMessage} to all the connected users.
+     * Sends the provided {@link Message} to all the connected users.
      *
      * @param message The message to send.
      */
@@ -77,7 +77,7 @@ public class DefaultMessageSender implements MessageSender
     }
 
     /**
-     * Sends the provided {@link OutMessage} to all the connection users, except those provided in the {@code Set}.
+     * Sends the provided {@link Message} to all the connection users, except those provided in the {@code Set}.
      *
      * @param message    The message to send.
      * @param exceptions The users that should not receive the message.
@@ -92,7 +92,7 @@ public class DefaultMessageSender implements MessageSender
     }
 
     /**
-     * Sends the provided {@link OutMessage} to all the provided {@code recipients}.
+     * Sends the provided {@link Message} to all the provided {@code recipients}.
      *
      * @param message    The message to send.
      * @param recipients The users that should receive the message.

@@ -1,14 +1,25 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output.messages;
 
 import com.tvestergaard.server.User;
 import org.json.JSONObject;
 
-public class PersonalWelcomeMessage implements OutMessage
+/**
+ * Defines a message that is sent to notify connected users, that a user has disconnected.
+ */
+public class DisconnectedMessage implements Message
 {
 
+    /**
+     * The user that is disconnecting.
+     */
     private final User user;
 
-    public PersonalWelcomeMessage(User user)
+    /**
+     * Creates a new {@link DisconnectedMessage}.
+     *
+     * @param user The user that is disconnecting.
+     */
+    public DisconnectedMessage(User user)
     {
         this.user = user;
     }
@@ -30,6 +41,6 @@ public class PersonalWelcomeMessage implements OutMessage
      */
     @Override public String getMessageType()
     {
-        return "personal_welcome_message";
+        return "disconnected-message";
     }
 }

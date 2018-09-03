@@ -1,8 +1,8 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output.messages;
 
 import org.json.JSONObject;
 
-public class ErrorMessage implements OutMessage
+public class ErrorMessage implements Message
 {
 
     private final Exception exception;
@@ -19,7 +19,7 @@ public class ErrorMessage implements OutMessage
      */
     @Override public void addJson(JSONObject payload)
     {
-        payload.put("exception_name", exception.getClass().getSimpleName());
+        payload.put("exception-name", exception.getClass().getSimpleName());
     }
 
     /**

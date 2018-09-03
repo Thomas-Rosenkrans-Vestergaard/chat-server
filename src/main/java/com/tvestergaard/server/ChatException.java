@@ -1,27 +1,53 @@
 package com.tvestergaard.server;
 
-import com.tvestergaard.server.messages.OutMessage;
+import com.tvestergaard.server.output.messages.Message;
 import org.json.JSONObject;
 
-public class ChatException extends Exception implements OutMessage
+/**
+ * Defines a chat exception. The exception implements {@link Message} so the exception can be sent to users.
+ */
+public class ChatException extends Exception implements Message
 {
 
-    private final int exceptionId;
+    private final static String ATTRIBUTE_ID      = "id";
+    private final static String ATTRIBUTE_NAME    = "name";
+    private final static String ATTRIBUTE_MESSAGE = "message";
 
-    public ChatException(int exceptionId)
+    /**
+     * The id of the exception.
+     */
+    private final int id;
+
+    /**
+     * Creates a new {@link ChatException}.
+     *
+     * @param id The id of the exception.
+     */
+    public ChatException(int id)
     {
-        this.exceptionId = exceptionId;
+        this.id = id;
     }
 
-    public ChatException(int exceptionId, String message)
+    /**
+     * Creates a new {@link ChatException}.
+     *
+     * @param id      The id of the exception.
+     * @param message The message sent to the user.
+     */
+    public ChatException(int id, String message)
     {
         super(message);
-        this.exceptionId = exceptionId;
+        this.id = id;
     }
 
-    public int getExceptionId()
+    /**
+     * Returns the id of the chat exception.
+     *
+     * @return The id of the chat exception.
+     */
+    public int getId()
     {
-        return this.exceptionId;
+        return this.id;
     }
 
     /**
@@ -36,8 +62,8 @@ public class ChatException extends Exception implements OutMessage
 
     @Override public void addJson(JSONObject payload)
     {
-        payload.put("id", getExceptionId());
-        payload.put("name", getClass().getSimpleName());
-        payload.put("message", getMessage());
+        payload.put(ATTRIBUTE_ID, getId());
+        payload.put(ATTRIBUTE_NAME, getClass().getSimpleName());
+        payload.put(ATTRIBUTE_MESSAGE, getMessage());
     }
 }

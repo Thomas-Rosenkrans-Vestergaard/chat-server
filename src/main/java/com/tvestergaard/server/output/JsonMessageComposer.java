@@ -1,9 +1,14 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output;
 
+import com.tvestergaard.server.output.messages.Message;
+import com.tvestergaard.server.output.messages.MessageComposer;
 import org.json.JSONObject;
 
 import java.time.Instant;
 
+/**
+ * Composes Json strings from provided {@link Message} instances.
+ */
 public class JsonMessageComposer implements MessageComposer
 {
 
@@ -12,12 +17,12 @@ public class JsonMessageComposer implements MessageComposer
     private final static String ATTRIBUTE_PAYLOAD = "payload";
 
     /**
-     * Composes some Json from the provided {@link OutMessage}.
+     * Composes some Json from the provided {@link Message}.
      *
      * @param message The message to compose.
      * @return The resulting Json.
      */
-    public String compose(OutMessage message)
+    public String compose(Message message)
     {
         JSONObject root = new JSONObject();
         root.put(ATTRIBUTE_TYPE, message.getMessageType());

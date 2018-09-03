@@ -1,4 +1,4 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output.messages;
 
 import com.tvestergaard.server.User;
 import org.json.JSONObject;
@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Represents a message containing a chat message.
  */
-public class OutTextMessage implements OutMessage
+public class TextMessage implements Message
 {
 
     private final static String SENDER_ATTRIBUTE  = "sender";
@@ -23,12 +23,12 @@ public class OutTextMessage implements OutMessage
     private final String message;
 
     /**
-     * Creates a new {@link OutTextMessage}.
+     * Creates a new {@link TextMessage}.
      *
      * @param sender  The client who sent the message.
      * @param message The body of the message.
      */
-    public OutTextMessage(User sender, String message)
+    public TextMessage(User sender, String message)
     {
         this.sender = sender;
         this.message = message;

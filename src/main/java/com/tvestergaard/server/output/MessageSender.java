@@ -1,7 +1,7 @@
 package com.tvestergaard.server.output;
 
-import com.tvestergaard.server.messages.OutMessage;
-import com.tvestergaard.server.messages.Recipients;
+import com.tvestergaard.server.output.messages.Message;
+import com.tvestergaard.server.output.messages.Recipients;
 
 /**
  * Defines a type that sends messages to recipients.
@@ -15,5 +15,5 @@ public interface MessageSender
      * @param recipients The recipients to send the message to.
      * @param message    The message to send to the recipients.
      */
-    void send(Recipients recipients, OutMessage message);
+    void send(Recipients recipients, Message message);
 }

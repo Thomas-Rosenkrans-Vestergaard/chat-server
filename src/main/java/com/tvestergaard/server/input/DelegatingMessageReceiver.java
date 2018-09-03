@@ -3,7 +3,7 @@ package com.tvestergaard.server.input;
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.messages.Recipients;
+import com.tvestergaard.server.output.messages.Recipients;
 import com.tvestergaard.server.output.MessageSender;
 import org.json.JSONException;
 import org.json.JSONObject;

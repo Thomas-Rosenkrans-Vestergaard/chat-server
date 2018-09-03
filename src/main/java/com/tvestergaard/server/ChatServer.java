@@ -2,7 +2,8 @@ package com.tvestergaard.server;
 
 import com.tvestergaard.server.input.DelegatingMessageReceiver;
 import com.tvestergaard.server.input.ForwardingMessageReceiverListener;
-import com.tvestergaard.server.messages.*;
+import com.tvestergaard.server.output.JsonMessageComposer;
+import com.tvestergaard.server.output.messages.*;
 import com.tvestergaard.server.output.DefaultMessageSender;
 import com.tvestergaard.server.output.MessageSender;
 import org.java_websocket.WebSocket;
@@ -53,8 +54,8 @@ public class ChatServer extends WebSocketServer
         User user = users.add(conn);
         conn.setAttachment(user);
 
-        sender.send(Recipients.toAllExcept(user), new BroadcastWelcomeMessage(user));
-        sender.send(Recipients.toThese(user), new PersonalWelcomeMessage(user));
+        sender.send(Recipients.toAllExcept(user), new PublicConnectedMessage(user));
+        sender.send(Recipients.toThese(user), new PrivateConnectedMessage(user));
     }
 
     /**
@@ -69,7 +70,7 @@ public class ChatServer extends WebSocketServer
     {
         User user = conn.getAttachment();
         users.remove(user);
-        sender.send(Recipients.toAllExcept(user), new GoodbyeMessage(user));
+        sender.send(Recipients.toAllExcept(user), new DisconnectedMessage(user));
     }
 
     /**

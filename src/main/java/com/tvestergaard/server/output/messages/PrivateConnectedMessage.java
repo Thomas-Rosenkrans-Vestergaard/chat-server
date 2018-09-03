@@ -1,14 +1,25 @@
-package com.tvestergaard.server.messages;
+package com.tvestergaard.server.output.messages;
 
 import com.tvestergaard.server.User;
 import org.json.JSONObject;
 
-public class GoodbyeMessage implements OutMessage
+/**
+ * Defines a message that notifies a user when they have connected.
+ */
+public class PrivateConnectedMessage implements Message
 {
 
+    /**
+     * The user that connected.
+     */
     private final User user;
 
-    public GoodbyeMessage(User user)
+    /**
+     * Creates a new {@link PrivateConnectedMessage}.
+     *
+     * @param user The user that connected.
+     */
+    public PrivateConnectedMessage(User user)
     {
         this.user = user;
     }
@@ -30,6 +41,6 @@ public class GoodbyeMessage implements OutMessage
      */
     @Override public String getMessageType()
     {
-        return "goodbye_message";
+        return "private-connected-message";
     }
 }
