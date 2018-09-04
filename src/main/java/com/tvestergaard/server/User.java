@@ -55,12 +55,11 @@ public class User
      *
      * @return The Json representation of the {@code User}.
      */
-    public String toJson()
+    public JSONObject toJson()
     {
         return new JSONObject()
                 .put("id", id)
-                .put("username", username)
-                .toString();
+                .put("username", username);
     }
 
     @Override public boolean equals(Object o)
