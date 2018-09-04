@@ -1,12 +1,13 @@
 package com.tvestergaard.server.output;
 
+import com.tvestergaard.server.User;
 import com.tvestergaard.server.output.messages.Message;
 import com.tvestergaard.server.output.messages.Recipients;
 
 /**
  * Defines a type that sends messages to recipients.
  */
-public interface MessageSender
+public interface MessageTransmitter
 {
 
     /**
@@ -16,4 +17,15 @@ public interface MessageSender
      * @param message    The message to send to the recipients.
      */
     void send(Recipients recipients, Message message);
+
+    /**
+     * Sends the provided message to the provided recipients.
+     *
+     * @param user    The user to send the message to.
+     * @param message The message to send to the user.
+     */
+    default void send(User user, Message message)
+    {
+        send(Recipients.toThese(user), message);
+    }
 }

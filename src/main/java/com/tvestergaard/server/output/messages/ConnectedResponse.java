@@ -4,22 +4,22 @@ import com.tvestergaard.server.User;
 import org.json.JSONObject;
 
 /**
- * Defines a message that is sent to notify connected users, that a user has disconnected.
+ * Defines a message that notifies a user when they have connected.
  */
-public class DisconnectedMessage implements Message
+public class ConnectedResponse implements Message
 {
 
     /**
-     * The user that is disconnecting.
+     * The user that connected.
      */
     private final User user;
 
     /**
-     * Creates a new {@link DisconnectedMessage}.
+     * Creates a new {@link ConnectedResponse}.
      *
-     * @param user The user that is disconnecting.
+     * @param user The user that connected.
      */
-    public DisconnectedMessage(User user)
+    public ConnectedResponse(User user)
     {
         this.user = user;
     }
@@ -41,6 +41,6 @@ public class DisconnectedMessage implements Message
      */
     @Override public String getMessageType()
     {
-        return "disconnected-message";
+        return "connected-response";
     }
 }

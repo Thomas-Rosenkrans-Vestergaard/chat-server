@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Notifies clients that a new user has joined.
  */
-public class PublicConnectedMessage implements Message
+public class ConnectedNotification implements Message
 {
 
     /**
@@ -15,11 +15,11 @@ public class PublicConnectedMessage implements Message
     private final User user;
 
     /**
-     * Creates a new {@link PublicConnectedMessage}.
+     * Creates a new {@link ConnectedNotification}.
      *
      * @param user The user that just connected.
      */
-    public PublicConnectedMessage(User user)
+    public ConnectedNotification(User user)
     {
         this.user = user;
     }
@@ -31,7 +31,7 @@ public class PublicConnectedMessage implements Message
      */
     @Override public String getMessageType()
     {
-        return "public-open-message";
+        return "connected-notification";
     }
 
     /**

@@ -67,8 +67,47 @@ public class UserRepository
      */
     public String randomUsername()
     {
-        String randomUsername = Long.toHexString(Double.doubleToLongBits(Math.random()));
+        String randomUsername = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0, 4);
 
         return usedUsernames.contains(randomUsername) ? randomUsername() : randomUsername;
+    }
+
+    /**
+     * Checks if the provided user instance is contained within this repository such that {@code user == search}.
+     *
+     * @param user The user to check for.
+     * @return {@code true} when the provided user is contained within thsi repository, {@code false} otherwise.
+     */
+    public boolean contains(User user)
+    {
+        User find = users.get(user.getId());
+
+        return find == null ? false : find == user;
+    }
+
+
+    /**
+     * Attempts to rename the provided user to the provided {@code newUsername}.
+     *
+     * @param user        The user to rename.
+     * @param newUsername The new username.
+     * @return {@code true} when the user was renamed, {@code false} in all other cases.
+     */
+    public boolean rename(User user, String newUsername)
+    {
+        if (!contains(user))
+            return false;
+
+        if (usedUsernames.contains(newUsername) && !user.getUsername().equals(newUsername))
+            return false;
+
+        synchronized (usedUsernames) {
+            String oldUsername = user.getUsername();
+            user.setUsername(newUsername);
+            usedUsernames.remove(oldUsername);
+            usedUsernames.add(newUsername);
+        }
+
+        return true;
     }
 }

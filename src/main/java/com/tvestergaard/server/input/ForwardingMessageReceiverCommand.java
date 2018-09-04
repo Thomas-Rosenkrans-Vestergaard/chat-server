@@ -3,9 +3,9 @@ package com.tvestergaard.server.input;
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.output.messages.TextMessage;
+import com.tvestergaard.server.output.MessageTransmitter;
 import com.tvestergaard.server.output.messages.Recipients;
-import com.tvestergaard.server.output.MessageSender;
+import com.tvestergaard.server.output.messages.TextMessage;
 import org.json.JSONObject;
 
 /**
@@ -21,20 +21,20 @@ public class ForwardingMessageReceiverCommand implements MessageReceiverCommand
     private final UserRepository users;
 
     /**
-     * The {@link MessageSender} used to send messages to connected users.
+     * The {@link MessageTransmitter} used to send messages to connected users.
      */
-    private final MessageSender output;
+    private final MessageTransmitter transmitter;
 
     /**
      * Creates a new {@link ForwardingMessageReceiverCommand}.
      *
-     * @param users  The repository containing the connected users.
-     * @param output The {@link MessageSender} used to send messages to connected users.
+     * @param users       The repository containing the connected users.
+     * @param transmitter The {@link MessageTransmitter} used to send messages to connected users.
      */
-    public ForwardingMessageReceiverCommand(UserRepository users, MessageSender output)
+    public ForwardingMessageReceiverCommand(UserRepository users, MessageTransmitter transmitter)
     {
         this.users = users;
-        this.output = output;
+        this.transmitter = transmitter;
     }
 
     /**
@@ -57,9 +57,9 @@ public class ForwardingMessageReceiverCommand implements MessageReceiverCommand
     {
         try {
             String message = payload.getString("message");
-            output.send(Recipients.toAllExcept(sender), new TextMessage(sender, message));
+            transmitter.send(Recipients.toAllExcept(sender), new TextMessage(sender, message));
         } catch (Exception e) {
-            output.send(Recipients.toThese(sender), new GeneralChatException(e));
+            transmitter.send(Recipients.toThese(sender), new GeneralChatException(e));
         }
     }
 }

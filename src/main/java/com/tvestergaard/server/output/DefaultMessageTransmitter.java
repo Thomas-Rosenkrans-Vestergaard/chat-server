@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The default implementation of the {@link MessageSender} interface.
+ * The default implementation of the {@link MessageTransmitter} interface.
  */
-public class DefaultMessageSender implements MessageSender
+public class DefaultMessageTransmitter implements MessageTransmitter
 {
 
     /**
@@ -26,12 +26,12 @@ public class DefaultMessageSender implements MessageSender
     private final MessageComposer composer;
 
     /**
-     * Creates a new {@link DefaultMessageSender}.
+     * Creates a new {@link DefaultMessageTransmitter}.
      *
      * @param users    The repository containing the connected users.
      * @param composer The object used to create text-based messages that can be transmitted using websockets.
      */
-    public DefaultMessageSender(UserRepository users, MessageComposer composer)
+    public DefaultMessageTransmitter(UserRepository users, MessageComposer composer)
     {
         this.users = users;
         this.composer = composer;

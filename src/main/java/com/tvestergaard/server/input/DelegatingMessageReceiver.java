@@ -3,8 +3,8 @@ package com.tvestergaard.server.input;
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
+import com.tvestergaard.server.output.MessageTransmitter;
 import com.tvestergaard.server.output.messages.Recipients;
-import com.tvestergaard.server.output.MessageSender;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -30,7 +30,7 @@ public class DelegatingMessageReceiver implements MessageReceiver
     /**
      * The object used to send messages to users, used in exceptional cases.
      */
-    private final MessageSender output;
+    private final MessageTransmitter transmitter;
 
     /**
      * The repository storing the connected users.
@@ -40,12 +40,12 @@ public class DelegatingMessageReceiver implements MessageReceiver
     /**
      * Creates a new {@link DelegatingMessageReceiver}.
      *
-     * @param output The object used to send messages to users, used in exceptional cases.
-     * @param users  The repository storing the connected users.
+     * @param transmitter The object used to send messages to users, used in exceptional cases.
+     * @param users       The repository storing the connected users.
      */
-    public DelegatingMessageReceiver(MessageSender output, UserRepository users)
+    public DelegatingMessageReceiver(MessageTransmitter transmitter, UserRepository users)
     {
-        this.output = output;
+        this.transmitter = transmitter;
         this.users = users;
     }
 
@@ -73,16 +73,16 @@ public class DelegatingMessageReceiver implements MessageReceiver
 
             MessageReceiverCommand responsiblecommand = commands.get(root.getString(ATTRIBUTE_TYPE));
             if (responsiblecommand == null) {
-                output.send(Recipients.toThese(sender), new NoCommandException());
+                transmitter.send(Recipients.toThese(sender), new NoCommandException());
                 return;
             }
 
             responsiblecommand.handle(root.getJSONObject(ATTRIBUTE_PAYLOAD), sender);
 
         } catch (JSONException e) {
-            output.send(Recipients.toThese(sender), new ParseChatException());
+            transmitter.send(Recipients.toThese(sender), new ParseChatException());
         } catch (Exception e) {
-            output.send(Recipients.toThese(sender), new GeneralChatException(e));
+            transmitter.send(Recipients.toThese(sender), new GeneralChatException(e));
         }
     }
 }

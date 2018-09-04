@@ -62,6 +62,16 @@ public class User
                 .put("username", username);
     }
 
+    /**
+     * Sets the username of the user.
+     *
+     * @param newUsername The new username.
+     */
+    public void setUsername(String newUsername)
+    {
+        this.username = username;
+    }
+
     @Override public boolean equals(Object o)
     {
         if (this == o) return true;
