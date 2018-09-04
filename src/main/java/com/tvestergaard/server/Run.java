@@ -9,19 +9,20 @@ public class Run
 
     public static void main(String[] args) throws Exception
     {
-        String host = "localhost";
-        int    port = 8887;
-        try {
-            port = Integer.parseInt(args[0]);
-        } catch (Exception ex) {
-        }
+        String host = args.length > 0 ? args[0] : "localhost";
+        int    port = args.length > 1 ? Integer.parseInt(args[1]) : 8887;
+
         ChatServer s = new ChatServer(new InetSocketAddress(host, port));
         s.start();
-        System.out.println("ChatServer started on port: " + s.getPort());
+        System.out.println(String.format(
+                "ChatServer started on host %s on port %d.",
+                host,
+                port));
+        System.out.println("'exit' to stop");
 
-        BufferedReader sysin = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            String in = sysin.readLine();
+            String in = systemIn.readLine();
             s.broadcast(in);
             if (in.equals("exit")) {
                 s.stop(1000);
