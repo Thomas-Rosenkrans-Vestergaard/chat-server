@@ -67,9 +67,17 @@ public class UserRepository
      */
     public String randomUsername()
     {
-        String randomUsername = Long.toHexString(Double.doubleToLongBits(Math.random())).substring(0, 4);
+        String        alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        int           n        = alphabet.length();
+        StringBuilder builder  = new StringBuilder(6);
+        Random        r        = new Random();
 
-        return usedUsernames.contains(randomUsername) ? randomUsername() : randomUsername;
+        for (int i = 0; i < 6; i++)
+            builder.append(alphabet.charAt(r.nextInt(n)));
+
+        String newUsername = builder.toString();
+
+        return usedUsernames.contains(newUsername) ? randomUsername() : newUsername;
     }
 
     /**

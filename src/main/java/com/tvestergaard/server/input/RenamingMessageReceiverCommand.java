@@ -53,7 +53,7 @@ public class RenamingMessageReceiverCommand implements MessageReceiverCommand
      */
     @Override public void handle(JSONObject payload, User sender)
     {
-        String newUsername = payload.getString("newUsername");
+        String newUsername = payload.getString("new-username");
 
         if (newUsername == null) {
             transmitter.send(sender, new MissingDataException("Missing argument 'new-username'."));
@@ -120,7 +120,7 @@ public class RenamingMessageReceiverCommand implements MessageReceiverCommand
          */
         @Override public void addJson(JSONObject payload)
         {
-            payload.put("newUsername", newUsername);
+            payload.put("new-username", newUsername);
             payload.put("code", code);
         }
     }

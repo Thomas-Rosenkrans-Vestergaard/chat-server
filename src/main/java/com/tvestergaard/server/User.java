@@ -69,7 +69,7 @@ public class User
      */
     public void setUsername(String newUsername)
     {
-        this.username = username;
+        this.username = newUsername;
     }
 
     @Override public boolean equals(Object o)
