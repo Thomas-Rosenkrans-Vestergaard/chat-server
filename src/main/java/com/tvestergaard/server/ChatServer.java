@@ -2,10 +2,14 @@ package com.tvestergaard.server;
 
 import com.tvestergaard.server.input.DelegatingMessageReceiver;
 import com.tvestergaard.server.input.ForwardingMessageReceiverCommand;
-import com.tvestergaard.server.output.JsonMessageComposer;
-import com.tvestergaard.server.output.messages.*;
+import com.tvestergaard.server.input.RenamingMessageReceiverCommand;
 import com.tvestergaard.server.output.DefaultMessageTransmitter;
+import com.tvestergaard.server.output.JsonMessageComposer;
 import com.tvestergaard.server.output.MessageTransmitter;
+import com.tvestergaard.server.output.messages.ConnectedNotification;
+import com.tvestergaard.server.output.messages.ConnectedResponse;
+import com.tvestergaard.server.output.messages.DisconnectedNotification;
+import com.tvestergaard.server.output.messages.Recipients;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ClientHandshake;
@@ -24,12 +28,12 @@ public class ChatServer extends WebSocketServer
     /**
      * The object responsible for sending messages.
      */
-    private final MessageTransmitter sender = new DefaultMessageTransmitter(users, new JsonMessageComposer());
+    private final MessageTransmitter transmitter = new DefaultMessageTransmitter(users, new JsonMessageComposer());
 
     /**
      * The input that can receive incoming messages.
      */
-    private final DelegatingMessageReceiver receiver = new DelegatingMessageReceiver(sender, users);
+    private final DelegatingMessageReceiver receiver = new DelegatingMessageReceiver(transmitter, users);
 
     /**
      * Creates a new {@link ChatServer}.
@@ -39,8 +43,6 @@ public class ChatServer extends WebSocketServer
     public ChatServer(InetSocketAddress address)
     {
         super(address);
-
-        receiver.register(new ForwardingMessageReceiverCommand(users, sender));
     }
 
     /**
@@ -54,8 +56,8 @@ public class ChatServer extends WebSocketServer
         User user = users.add(conn);
         conn.setAttachment(user);
 
-        sender.send(Recipients.toAllExcept(user), new ConnectedNotification(user));
-        sender.send(Recipients.toThese(user), new ConnectedResponse(user));
+        transmitter.send(Recipients.toAllExcept(user), new ConnectedNotification(user));
+        transmitter.send(Recipients.toThese(user), new ConnectedResponse(user));
     }
 
     /**
@@ -70,7 +72,7 @@ public class ChatServer extends WebSocketServer
     {
         User user = conn.getAttachment();
         users.remove(user);
-        sender.send(Recipients.toAllExcept(user), new DisconnectedNotification(user));
+        transmitter.send(Recipients.toAllExcept(user), new DisconnectedNotification(user));
     }
 
     /**
@@ -89,8 +91,12 @@ public class ChatServer extends WebSocketServer
 
     }
 
+    /**
+     * Registers the receiver commands with the receiver.
+     */
     @Override public void onStart()
     {
-
+        receiver.register(new ForwardingMessageReceiverCommand(users, transmitter));
+        receiver.register(new RenamingMessageReceiverCommand(transmitter, users));
     }
 }
