@@ -71,13 +71,13 @@ public class DelegatingMessageReceiver implements MessageReceiver
             JSONTokener tokener = new JSONTokener(message);
             JSONObject  root    = new JSONObject(tokener);
 
-            MessageReceiverCommand responsiblecommand = commands.get(root.getString(ATTRIBUTE_TYPE));
-            if (responsiblecommand == null) {
+            MessageReceiverCommand responsibleCommand = commands.get(root.getString(ATTRIBUTE_TYPE));
+            if (responsibleCommand == null) {
                 transmitter.send(Recipients.toThese(sender), new NoCommandException());
                 return;
             }
 
-            responsiblecommand.handle(root.getJSONObject(ATTRIBUTE_PAYLOAD), sender);
+            responsibleCommand.handle(root.getJSONObject(ATTRIBUTE_PAYLOAD), sender);
 
         } catch (JSONException e) {
             transmitter.send(Recipients.toThese(sender), new ParseChatException());
