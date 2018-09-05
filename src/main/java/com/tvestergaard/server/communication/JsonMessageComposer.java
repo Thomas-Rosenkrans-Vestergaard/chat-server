@@ -1,7 +1,5 @@
-package com.tvestergaard.server.output;
+package com.tvestergaard.server.communication;
 
-import com.tvestergaard.server.output.messages.Message;
-import com.tvestergaard.server.output.messages.MessageComposer;
 import org.json.JSONObject;
 
 import java.time.Instant;

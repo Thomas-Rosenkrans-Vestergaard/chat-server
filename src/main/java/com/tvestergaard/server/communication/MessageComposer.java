@@ -1,4 +1,4 @@
-package com.tvestergaard.server.output.messages;
+package com.tvestergaard.server.communication;
 
 /**
  * Converts some {@link Message} to a text-based format.

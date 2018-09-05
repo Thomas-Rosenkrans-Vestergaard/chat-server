@@ -1,11 +1,11 @@
-package com.tvestergaard.server.input;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.User;
 
 /**
  * Defines a type that can handle an incoming message.
  */
-public interface MessageReceiver
+public interface Receiver
 {
 
     /**

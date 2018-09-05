@@ -1,4 +1,4 @@
-package com.tvestergaard.server.output.messages;
+package com.tvestergaard.server.communication;
 
 import org.json.JSONObject;
 

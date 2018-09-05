@@ -1,10 +1,7 @@
-package com.tvestergaard.server.output;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.output.messages.Message;
-import com.tvestergaard.server.output.messages.MessageComposer;
-import com.tvestergaard.server.output.messages.Recipients;
 
 import java.util.List;
 import java.util.Set;

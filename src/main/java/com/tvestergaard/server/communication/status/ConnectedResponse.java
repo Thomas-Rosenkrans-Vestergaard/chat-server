@@ -1,6 +1,7 @@
-package com.tvestergaard.server.output.messages;
+package com.tvestergaard.server.communication.status;
 
 import com.tvestergaard.server.User;
+import com.tvestergaard.server.communication.Message;
 import org.json.JSONObject;
 
 /**

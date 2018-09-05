@@ -1,13 +1,13 @@
-package com.tvestergaard.server.input;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.User;
 import org.json.JSONObject;
 
 /**
- * Defines a type that handles an incoming message. The {@link MessageReceiverCommand#getMessageType()} method is used to identify
- * the {@link MessageReceiverCommand} that handles an incoming message.
+ * Defines a type that handles an incoming message. The {@link ReceiverCommand#getMessageType()} method is used to identify
+ * the {@link ReceiverCommand} that handles an incoming message.
  */
-public interface MessageReceiverCommand
+public interface ReceiverCommand
 {
 
     /**

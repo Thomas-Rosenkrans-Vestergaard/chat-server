@@ -1,8 +1,6 @@
-package com.tvestergaard.server.output;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.User;
-import com.tvestergaard.server.output.messages.Message;
-import com.tvestergaard.server.output.messages.Recipients;
 
 /**
  * Defines a type that sends messages to recipients.

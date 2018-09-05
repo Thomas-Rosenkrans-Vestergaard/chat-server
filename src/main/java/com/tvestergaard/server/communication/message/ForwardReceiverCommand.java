@@ -1,18 +1,19 @@
-package com.tvestergaard.server.input;
+package com.tvestergaard.server.communication.message;
 
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.output.MessageTransmitter;
-import com.tvestergaard.server.output.messages.Message;
-import com.tvestergaard.server.output.messages.Recipients;
+import com.tvestergaard.server.communication.Message;
+import com.tvestergaard.server.communication.MessageTransmitter;
+import com.tvestergaard.server.communication.ReceiverCommand;
+import com.tvestergaard.server.communication.Recipients;
 import org.json.JSONObject;
 
 /**
- * Simple {@link MessageReceiverCommand} that forwards messages to all the other connected users. Implements basic
+ * Simple {@link ReceiverCommand} that forwards messages to all the other connected users. Implements basic
  * communication.
  */
-public class ForwardingMessageReceiverCommand implements MessageReceiverCommand
+public class ForwardReceiverCommand implements ReceiverCommand
 {
 
     /**
@@ -26,12 +27,12 @@ public class ForwardingMessageReceiverCommand implements MessageReceiverCommand
     private final MessageTransmitter transmitter;
 
     /**
-     * Creates a new {@link ForwardingMessageReceiverCommand}.
+     * Creates a new {@link ForwardReceiverCommand}.
      *
      * @param users       The repository containing the connected users.
      * @param transmitter The {@link MessageTransmitter} used to send messages to connected users.
      */
-    public ForwardingMessageReceiverCommand(UserRepository users, MessageTransmitter transmitter)
+    public ForwardReceiverCommand(UserRepository users, MessageTransmitter transmitter)
     {
         this.users = users;
         this.transmitter = transmitter;

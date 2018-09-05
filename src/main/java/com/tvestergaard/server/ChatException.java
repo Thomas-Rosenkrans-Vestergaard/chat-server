@@ -1,6 +1,6 @@
 package com.tvestergaard.server;
 
-import com.tvestergaard.server.output.messages.Message;
+import com.tvestergaard.server.communication.Message;
 import org.json.JSONObject;
 
 /**

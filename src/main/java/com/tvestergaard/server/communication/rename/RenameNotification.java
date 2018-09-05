@@ -1,25 +1,26 @@
-package com.tvestergaard.server.output.messages;
+package com.tvestergaard.server.communication.rename;
 
 import com.tvestergaard.server.User;
+import com.tvestergaard.server.communication.Message;
 import org.json.JSONObject;
 
 /**
- * Notifies clients that a new user has joined.
+ * The notification sent out to connected users, that another user has been renamed.
  */
-public class ConnectedNotification implements Message
+public class RenameNotification implements Message
 {
 
     /**
-     * The user that just connected.
+     * The updated user instance, with the new username.
      */
     private final User user;
 
     /**
-     * Creates a new {@link ConnectedNotification}.
+     * Creates a new {@link RenameNotification}.
      *
-     * @param user The user that just connected.
+     * @param user The updated user instance, with the new username.
      */
-    public ConnectedNotification(User user)
+    public RenameNotification(User user)
     {
         this.user = user;
     }
@@ -31,7 +32,7 @@ public class ConnectedNotification implements Message
      */
     @Override public String getMessageType()
     {
-        return "connected-notification";
+        return "rename-notification";
     }
 
     /**

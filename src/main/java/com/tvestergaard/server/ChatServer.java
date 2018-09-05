@@ -1,16 +1,16 @@
 package com.tvestergaard.server;
 
 import com.tvestergaard.server.configuration.PersistenceRepositories;
-import com.tvestergaard.server.input.DelegatingMessageReceiver;
-import com.tvestergaard.server.input.ForwardingMessageReceiverCommand;
-import com.tvestergaard.server.input.RenamingMessageReceiverCommand;
-import com.tvestergaard.server.output.DefaultMessageTransmitter;
-import com.tvestergaard.server.output.JsonMessageComposer;
-import com.tvestergaard.server.output.MessageTransmitter;
-import com.tvestergaard.server.output.messages.ConnectedNotification;
-import com.tvestergaard.server.output.messages.ConnectedResponse;
-import com.tvestergaard.server.output.messages.DisconnectedNotification;
-import com.tvestergaard.server.output.messages.Recipients;
+import com.tvestergaard.server.communication.DelegatingMessageReceiver;
+import com.tvestergaard.server.communication.message.ForwardReceiverCommand;
+import com.tvestergaard.server.communication.rename.RenameReceiverCommand;
+import com.tvestergaard.server.communication.DefaultMessageTransmitter;
+import com.tvestergaard.server.communication.JsonMessageComposer;
+import com.tvestergaard.server.communication.MessageTransmitter;
+import com.tvestergaard.server.communication.status.ConnectedNotification;
+import com.tvestergaard.server.communication.status.ConnectedResponse;
+import com.tvestergaard.server.communication.status.DisconnectedNotification;
+import com.tvestergaard.server.communication.Recipients;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ClientHandshake;
@@ -98,7 +98,7 @@ public class ChatServer extends WebSocketServer
      */
     @Override public void onStart()
     {
-        receiver.register(new ForwardingMessageReceiverCommand(users, transmitter));
-        receiver.register(new RenamingMessageReceiverCommand(transmitter, users));
+        receiver.register(new ForwardReceiverCommand(users, transmitter));
+        receiver.register(new RenameReceiverCommand(transmitter, users));
     }
 }

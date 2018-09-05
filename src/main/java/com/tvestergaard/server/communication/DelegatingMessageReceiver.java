@@ -1,10 +1,8 @@
-package com.tvestergaard.server.input;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.GeneralChatException;
 import com.tvestergaard.server.User;
 import com.tvestergaard.server.UserRepository;
-import com.tvestergaard.server.output.MessageTransmitter;
-import com.tvestergaard.server.output.messages.Recipients;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -13,19 +11,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implementation of {@link MessageReceiver} where multiple {@link MessageReceiverCommand}s can be registered to handle differing
+ * Implementation of {@link Receiver} where multiple {@link ReceiverCommand}s can be registered to handle differing
  * message types.
  */
-public class DelegatingMessageReceiver implements MessageReceiver
+public class DelegatingMessageReceiver implements Receiver
 {
 
     private final String ATTRIBUTE_TYPE    = "type";
     private final String ATTRIBUTE_PAYLOAD = "payload";
 
     /**
-     * The registered {@link MessageReceiverCommand} instances.
+     * The registered {@link ReceiverCommand} instances.
      */
-    private final Map<String, MessageReceiverCommand> commands = new HashMap<>();
+    private final Map<String, ReceiverCommand> commands = new HashMap<>();
 
     /**
      * The object used to send messages to users, used in exceptional cases.
@@ -50,17 +48,17 @@ public class DelegatingMessageReceiver implements MessageReceiver
     }
 
     /**
-     * Registers a new {@link MessageReceiverCommand}.
+     * Registers a new {@link ReceiverCommand}.
      *
      * @param command The command to register with the object.
      */
-    public void register(MessageReceiverCommand command)
+    public void register(ReceiverCommand command)
     {
         commands.put(command.getMessageType(), command);
     }
 
     /**
-     * Parses the incoming message and delegates its payload to a suitable {@link MessageReceiverCommand}.
+     * Parses the incoming message and delegates its payload to a suitable {@link ReceiverCommand}.
      *
      * @param sender  The user who sent the message.
      * @param message The raw message.
@@ -71,7 +69,7 @@ public class DelegatingMessageReceiver implements MessageReceiver
             JSONTokener tokener = new JSONTokener(message);
             JSONObject  root    = new JSONObject(tokener);
 
-            MessageReceiverCommand responsibleCommand = commands.get(root.getString(ATTRIBUTE_TYPE));
+            ReceiverCommand responsibleCommand = commands.get(root.getString(ATTRIBUTE_TYPE));
             if (responsibleCommand == null) {
                 transmitter.send(Recipients.toThese(sender), new NoCommandException());
                 return;

@@ -1,4 +1,4 @@
-package com.tvestergaard.server.input;
+package com.tvestergaard.server.communication;
 
 import com.tvestergaard.server.ChatException;
 
