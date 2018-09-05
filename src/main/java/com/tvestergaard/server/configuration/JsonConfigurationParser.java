@@ -28,8 +28,8 @@ public class JsonConfigurationParser implements ConfigurationParser
     @Override public ChatServerConfiguration parse(File file) throws ConfigurationParserException
     {
         try {
-            JSONTokener tokener = new JSONTokener(readFile(file));
-            JSONObject  root    = new JSONObject(tokener);
+            JSONTokener tokener  = new JSONTokener(readFile(file));
+            JSONObject  root     = new JSONObject(tokener);
 
             String                   host                     = readHost(root);
             int                      port                     = readPort(root);
@@ -134,7 +134,7 @@ public class JsonConfigurationParser implements ConfigurationParser
     private String readFile(File file) throws IOException
     {
         byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
-        return new String(encoded);
+        return new String(encoded, "US-ASCII");
     }
 
     private String nullableGetString(JSONObject object, String key)
@@ -169,7 +169,7 @@ public class JsonConfigurationParser implements ConfigurationParser
         while (it.hasNext()) {
             String key   = it.next();
             String value = nullableGetString(options, key);
-            if (value == null)
+            if (value != null)
                 result.put(key, options.getString(key));
         }
 

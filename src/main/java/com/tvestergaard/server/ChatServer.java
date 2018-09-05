@@ -1,5 +1,6 @@
 package com.tvestergaard.server;
 
+import com.tvestergaard.server.configuration.PersistenceRepositories;
 import com.tvestergaard.server.input.DelegatingMessageReceiver;
 import com.tvestergaard.server.input.ForwardingMessageReceiverCommand;
 import com.tvestergaard.server.input.RenamingMessageReceiverCommand;
@@ -39,8 +40,9 @@ public class ChatServer extends WebSocketServer
      * Creates a new {@link ChatServer}.
      *
      * @param address The
+     * @param repositories
      */
-    public ChatServer(InetSocketAddress address)
+    public ChatServer(InetSocketAddress address, PersistenceRepositories repositories)
     {
         super(address);
     }
