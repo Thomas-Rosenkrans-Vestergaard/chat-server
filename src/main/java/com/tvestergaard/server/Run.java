@@ -1,31 +1,32 @@
 package com.tvestergaard.server;
 
+import com.tvestergaard.server.configuration.ChatServerConfigurer;
+import com.tvestergaard.server.configuration.ConfigurationParser;
+import com.tvestergaard.server.configuration.JsonConfigurationParser;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetSocketAddress;
 
 public class Run
 {
 
     public static void main(String[] args) throws Exception
     {
-        String host = args.length > 0 ? args[0] : "localhost";
-        int    port = args.length > 1 ? Integer.parseInt(args[1]) : 8887;
+        if (args.length < 1)
+            throw new IllegalArgumentException("No configuration file specified.");
 
-        ChatServer s = new ChatServer(new InetSocketAddress(host, port));
-        s.start();
-        System.out.println(String.format(
-                "ChatServer started on host %s on port %d.",
-                host,
-                port));
-        System.out.println("'exit' to stop");
+        ConfigurationParser  parser     = new JsonConfigurationParser();
+        ChatServerConfigurer configurer = new ChatServerConfigurer(parser);
+        ChatServer           chatServer = configurer.configure(args[0]);
+        chatServer.start();
+        System.out.println("ChatServer started. Submit 'exit' to stop");
 
         BufferedReader systemIn = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String in = systemIn.readLine();
-            s.broadcast(in);
+            chatServer.broadcast(in);
             if (in.equals("exit")) {
-                s.stop(1000);
+                chatServer.stop(1000);
                 break;
             }
         }
