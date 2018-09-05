@@ -90,7 +90,7 @@ public class JsonConfigurationParser implements ConfigurationParser
         if (privateKeyPath == null)
             throw new ConfigurationParserException("Missing or malformed privateKeyPath attribute in root.ssl object.");
 
-        return new SSLConfigurationData(certificatePath, privateKeyPath, certPassword);
+        return new SSLConfigurationData(certificatePath, privateKeyPath, certPassword == null ? "" : certPassword);
     }
 
     /**
