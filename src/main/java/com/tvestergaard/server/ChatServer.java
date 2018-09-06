@@ -1,7 +1,7 @@
 package com.tvestergaard.server;
 
 import com.tvestergaard.server.configuration.PersistenceRepositories;
-import com.tvestergaard.server.communication.DelegatingMessageReceiver;
+import com.tvestergaard.server.communication.DelegatingReceiver;
 import com.tvestergaard.server.communication.message.ForwardReceiverCommand;
 import com.tvestergaard.server.communication.rename.RenameReceiverCommand;
 import com.tvestergaard.server.communication.DefaultMessageTransmitter;
@@ -34,7 +34,7 @@ public class ChatServer extends WebSocketServer
     /**
      * The input that can receive incoming messages.
      */
-    private final DelegatingMessageReceiver receiver = new DelegatingMessageReceiver(transmitter, users);
+    private final DelegatingReceiver receiver = new DelegatingReceiver(transmitter, users);
 
     /**
      * Creates a new {@link ChatServer}.

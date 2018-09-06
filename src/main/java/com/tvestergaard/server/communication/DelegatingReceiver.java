@@ -14,7 +14,7 @@ import java.util.Map;
  * Implementation of {@link Receiver} where multiple {@link ReceiverCommand}s can be registered to handle differing
  * message types.
  */
-public class DelegatingMessageReceiver implements Receiver
+public class DelegatingReceiver implements Receiver
 {
 
     private final String ATTRIBUTE_TYPE    = "type";
@@ -36,12 +36,12 @@ public class DelegatingMessageReceiver implements Receiver
     private final UserRepository users;
 
     /**
-     * Creates a new {@link DelegatingMessageReceiver}.
+     * Creates a new {@link DelegatingReceiver}.
      *
      * @param transmitter The object used to send messages to users, used in exceptional cases.
      * @param users       The repository storing the connected users.
      */
-    public DelegatingMessageReceiver(MessageTransmitter transmitter, UserRepository users)
+    public DelegatingReceiver(MessageTransmitter transmitter, UserRepository users)
     {
         this.transmitter = transmitter;
         this.users = users;

@@ -4,10 +4,6 @@ import com.tvestergaard.server.persistence.UserRepository;
 import com.tvestergaard.server.persistence.sqlite.SqliteUserRepository;
 import org.sqlite.SQLiteDataSource;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
 import java.util.Map;
 
 public class SqlitePersistenceDriver implements PersistenceDriver
@@ -18,7 +14,8 @@ public class SqlitePersistenceDriver implements PersistenceDriver
         return configuration.getDriver().toLowerCase().equals("sqlite");
     }
 
-    @Override public PersistenceRepositories handle(PersistenceConfiguration configuration) throws ConfigurationException
+    @Override
+    public PersistenceRepositories handle(PersistenceConfiguration configuration) throws ConfigurationException
     {
         Map<String, String> options = configuration.getOptions();
 
@@ -29,7 +26,6 @@ public class SqlitePersistenceDriver implements PersistenceDriver
         try {
             SQLiteDataSource source = new SQLiteDataSource();
             source.setUrl(String.format("jdbc:sqlite:%s", database));
-            Connection connection = source.getConnection();
 
             return new PersistenceRepositoriesData(
                     new SqliteUserRepository(source)
