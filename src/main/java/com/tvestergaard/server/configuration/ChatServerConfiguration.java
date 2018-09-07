@@ -33,5 +33,5 @@ public interface ChatServerConfiguration
      *
      * @return the configuration for the persistent storage of information, when the server starts and stops.
      */
-    PersistenceConfiguration getPersistenceConfiguration();
+    JooqConfiguration getJooqConfiguration();
 }

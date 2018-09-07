@@ -28,15 +28,15 @@ public class JsonConfigurationParser implements ConfigurationParser
     @Override public ChatServerConfiguration parse(File file) throws ConfigurationParserException
     {
         try {
-            JSONTokener tokener  = new JSONTokener(readFile(file));
-            JSONObject  root     = new JSONObject(tokener);
+            JSONTokener tokener = new JSONTokener(readFile(file));
+            JSONObject  root    = new JSONObject(tokener);
 
-            String                   host                     = readHost(root);
-            int                      port                     = readPort(root);
-            SSLConfiguration         sslConfiguration         = readSSLConfiguration(root);
-            PersistenceConfiguration persistenceConfiguration = readPersistenceConfiguration(root);
+            String            host              = readHost(root);
+            int               port              = readPort(root);
+            SSLConfiguration  sslConfiguration  = readSSLConfiguration(root);
+            JooqConfiguration jooqConfiguration = readJooqConfiguration(root);
 
-            return new ServerConfigurationData(host, port, sslConfiguration, persistenceConfiguration);
+            return new ServerConfigurationData(host, port, sslConfiguration, jooqConfiguration);
 
         } catch (IOException e) {
             throw new ConfigurationParserException("Could not read configuration file.", e);
@@ -44,28 +44,28 @@ public class JsonConfigurationParser implements ConfigurationParser
     }
 
     /**
-     * Reads the persistence configuration from the provided root Json configuration object.
+     * Reads the data configuration from the provided root Json configuration object.
      *
      * @param root The root Json configuration object.
-     * @return The resulting {@link PersistenceConfiguration}.
-     * @throws ConfigurationParserException When the persistence attribute or any required sub-attributes doesn't
+     * @return The resulting {@link JooqConfiguration}.
+     * @throws ConfigurationParserException When the data attribute or any required sub-attributes doesn't
      *                                      exist.
      */
-    private PersistenceConfiguration readPersistenceConfiguration(JSONObject root) throws ConfigurationParserException
+    private JooqConfiguration readJooqConfiguration(JSONObject root) throws ConfigurationParserException
     {
-        JSONObject persistence = nullableGetJsonObject(root, "persistence");
-        if (persistence == null)
-            throw new ConfigurationParserException("Missing or malformed persistence attribute in root object.");
+        JSONObject jooq = nullableGetJsonObject(root, "jooq");
+        if (jooq == null)
+            throw new ConfigurationParserException("Missing or malformed data attribute in root object.");
 
-        String     driver  = nullableGetString(persistence, "driver");
-        JSONObject options = nullableGetJsonObject(persistence, "options");
+        String     driver            = nullableGetString(jooq, "driver");
+        JSONObject connectionOptions = nullableGetJsonObject(jooq, "connection");
 
         if (driver == null)
-            throw new ConfigurationParserException("Missing or malformed driver attribute in root.persistence object.");
-        if (options == null)
-            throw new ConfigurationParserException("Missing or malformed options attribute in root.persistence object.");
+            throw new ConfigurationParserException("Missing or malformed driver attribute in root.data object.");
+        if (connectionOptions == null)
+            throw new ConfigurationParserException("Missing or malformed connection attribute in root.data object.");
 
-        return new PersistenceConfigurationData(driver, jsonObjectToMap(options));
+        return new JsonConfigurationData(driver, jsonObjectToMap(connectionOptions));
     }
 
     /**
@@ -179,17 +179,17 @@ public class JsonConfigurationParser implements ConfigurationParser
     private static class ServerConfigurationData implements ChatServerConfiguration
     {
 
-        private final String                   host;
-        private final int                      port;
-        private final SSLConfiguration         sslConfiguration;
-        private final PersistenceConfiguration persistenceConfiguration;
+        private final String            host;
+        private final int               port;
+        private final SSLConfiguration  sslConfiguration;
+        private final JooqConfiguration jooqConfiguration;
 
-        public ServerConfigurationData(String host, int port, SSLConfiguration sslConfiguration, PersistenceConfiguration persistenceConfiguration)
+        public ServerConfigurationData(String host, int port, SSLConfiguration sslConfiguration, JooqConfiguration jooqConfiguration)
         {
             this.host = host;
             this.port = port;
             this.sslConfiguration = sslConfiguration;
-            this.persistenceConfiguration = persistenceConfiguration;
+            this.jooqConfiguration = jooqConfiguration;
         }
 
         @Override public String getHost()
@@ -207,9 +207,9 @@ public class JsonConfigurationParser implements ConfigurationParser
             return sslConfiguration;
         }
 
-        @Override public PersistenceConfiguration getPersistenceConfiguration()
+        @Override public JooqConfiguration getJooqConfiguration()
         {
-            return persistenceConfiguration;
+            return jooqConfiguration;
         }
     }
 
@@ -243,16 +243,16 @@ public class JsonConfigurationParser implements ConfigurationParser
         }
     }
 
-    private static class PersistenceConfigurationData implements PersistenceConfiguration
+    private static class JsonConfigurationData implements JooqConfiguration
     {
 
         private final String              driver;
-        private final Map<String, String> options;
+        private final Map<String, String> connectionOptions;
 
-        public PersistenceConfigurationData(String driver, Map<String, String> options)
+        public JsonConfigurationData(String driver, Map<String, String> connectionOptions)
         {
             this.driver = driver;
-            this.options = options;
+            this.connectionOptions = connectionOptions;
         }
 
         @Override public String getDriver()
@@ -260,9 +260,9 @@ public class JsonConfigurationParser implements ConfigurationParser
             return driver;
         }
 
-        @Override public Map<String, String> getOptions()
+        @Override public Map<String, String> getConnectionOptions()
         {
-            return options;
+            return connectionOptions;
         }
     }
 }

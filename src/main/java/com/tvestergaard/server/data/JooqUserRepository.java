@@ -1,9 +1,28 @@
-package com.tvestergaard.server.persistence;
+package com.tvestergaard.server.data;
 
 import com.tvestergaard.server.User;
+import org.jooq.DSLContext;
 
-public interface UserRepository
+/**
+ * {@link UserRepository} implementation that performs operations upon a Jooq {@code DSLContext}.
+ */
+public class JooqUserRepository implements UserRepository
 {
+
+    /**
+     * The {@code DSLContext} to perform operations upon.
+     */
+    private final DSLContext dslContext;
+
+    /**
+     * Creates a new {@link JooqUserRepository}.
+     *
+     * @param dslContext The {@code DSLContext} to perform operations upon.
+     */
+    public JooqUserRepository(DSLContext dslContext)
+    {
+        this.dslContext = dslContext;
+    }
 
     /**
      * Finds the user with the provided id.
@@ -12,7 +31,10 @@ public interface UserRepository
      * @return The user with the provided id or {@code null} if no such user exists.
      * @throws DataAccessException When an exception occurs while accessing the required data.
      */
-    User find(int id) throws DataAccessException;
+    @Override public User find(int id) throws DataAccessException
+    {
+        return null;
+    }
 
     /**
      * Finds the user with the provided username.
@@ -21,7 +43,10 @@ public interface UserRepository
      * @return The user with the provided username or {@code null} if no such user exists.
      * @throws DataAccessException When an exception occurs while accessing the required data.
      */
-    User find(String username) throws DataAccessException;
+    @Override public User find(String username) throws DataAccessException
+    {
+        return null;
+    }
 
     /**
      * Creates a new user.
@@ -31,5 +56,8 @@ public interface UserRepository
      * @return The resulting user instance.
      * @throws DataAccessException When an exception occurs while accessing the required data.
      */
-    User create(String username, String hash) throws DataAccessException;
+    @Override public User create(String username, String hash) throws DataAccessException
+    {
+        return null;
+    }
 }

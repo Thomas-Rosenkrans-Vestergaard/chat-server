@@ -2,7 +2,7 @@ package com.tvestergaard.server.configuration;
 
 import java.util.Map;
 
-public interface PersistenceConfiguration
+public interface JooqConfiguration
 {
 
     /**
@@ -13,9 +13,9 @@ public interface PersistenceConfiguration
     String getDriver();
 
     /**
-     * Returns the options map that is provided to the driver specified by {@link PersistenceConfiguration#getDriver()}.
+     * Returns the options map that is provided to the driver specified by {@link JooqConfiguration#getDriver()}.
      *
      * @return The options map.
      */
-    Map<String, String> getOptions();
+    Map<String, String> getConnectionOptions();
 }

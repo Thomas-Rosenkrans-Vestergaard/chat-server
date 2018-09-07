@@ -1,6 +1,7 @@
 package com.tvestergaard.server.configuration;
 
 import com.tvestergaard.server.ChatServer;
+import org.jooq.DSLContext;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -24,7 +25,7 @@ public class ChatServerConfigurer
     /**
      * The object responsible for creating data repositories.
      */
-    private final PersistenceConfigurer persistenceConfigurer = new PersistenceConfigurer();
+    private final JooqConfigurer jooqConfigurer = new JooqConfigurer();
 
     /**
      * Creates a new {@link ChatServerConfigurer}.
@@ -51,9 +52,10 @@ public class ChatServerConfigurer
 
         ChatServerConfiguration configuration = parser.parse(configurationFile);
 
-        PersistenceRepositories repositories = persistenceConfigurer.handle(configuration.getPersistenceConfiguration());
-        ChatServer chatServer = new ChatServer(new InetSocketAddress(configuration.getHost(),
-                configuration.getPort()), repositories);
+        DSLContext dslContext = jooqConfigurer.handle(configuration.getJooqConfiguration());
+        ChatServer chatServer = new ChatServer(
+                new InetSocketAddress(configuration.getHost(), configuration.getPort()),
+                dslContext);
 
         SSLConfiguration sslConfiguration = configuration.getSSLConfiguration();
         if (sslConfiguration != null) {

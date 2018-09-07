@@ -1,20 +1,16 @@
 package com.tvestergaard.server;
 
-import com.tvestergaard.server.configuration.PersistenceRepositories;
-import com.tvestergaard.server.communication.DelegatingReceiver;
+import com.tvestergaard.server.communication.*;
 import com.tvestergaard.server.communication.message.ForwardReceiverCommand;
 import com.tvestergaard.server.communication.rename.RenameReceiverCommand;
-import com.tvestergaard.server.communication.DefaultMessageTransmitter;
-import com.tvestergaard.server.communication.JsonMessageComposer;
-import com.tvestergaard.server.communication.MessageTransmitter;
 import com.tvestergaard.server.communication.status.ConnectedNotification;
 import com.tvestergaard.server.communication.status.ConnectedResponse;
 import com.tvestergaard.server.communication.status.DisconnectedNotification;
-import com.tvestergaard.server.communication.Recipients;
 import org.java_websocket.WebSocket;
 import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.jooq.DSLContext;
 
 import java.net.InetSocketAddress;
 
@@ -36,15 +32,19 @@ public class ChatServer extends WebSocketServer
      */
     private final DelegatingReceiver receiver = new DelegatingReceiver(transmitter, users);
 
+    private final DSLContext dslContext;
+
     /**
      * Creates a new {@link ChatServer}.
      *
-     * @param address The
-     * @param repositories
+     * @param address    The address the chat server should run on.
+     * @param dslContext The jooq {@code DSLContext}.
      */
-    public ChatServer(InetSocketAddress address, PersistenceRepositories repositories)
+    public ChatServer(InetSocketAddress address, DSLContext dslContext)
     {
         super(address);
+
+        this.dslContext = dslContext;
     }
 
     /**
